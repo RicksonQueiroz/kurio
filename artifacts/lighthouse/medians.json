@@ -1,0 +1,81 @@
+{
+  "environment": {
+    "node": "v24.12.0",
+    "platform": "win32",
+    "release": "10.0.26300",
+    "cpu": "AMD Ryzen 5 5500                               ",
+    "lighthouse": "13.5.0",
+    "date": "2026-10-18T16:38:25.092Z",
+    "conditions": "Build de produção, mocks padrão completos, Chrome headless, throttling simulado padrão do Lighthouse; armazenamento preservado para o Service Worker.",
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4",
+    "vite": "8.3.4",
+    "buildManifest": "build-manifest.json"
+  },
+  "medians": [
+    {
+      "page": "inicio",
+      "mode": "desktop",
+      "scores": {
+        "performance": 92,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100,
+        "agentic-browsing": 100
+      },
+      "metrics": {
+        "largest-contentful-paint": 1093.1969155944823,
+        "cumulative-layout-shift": 0.0007906155508535879,
+        "total-blocking-time": 203.61826324462902
+      }
+    },
+    {
+      "page": "detalhe",
+      "mode": "desktop",
+      "scores": {
+        "performance": 95,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100,
+        "agentic-browsing": 100
+      },
+      "metrics": {
+        "largest-contentful-paint": 1322.2545155944827,
+        "cumulative-layout-shift": 0.00008591206868489584,
+        "total-blocking-time": 132.50050544738758
+      }
+    },
+    {
+      "page": "inicio",
+      "mode": "mobile",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100,
+        "agentic-browsing": 100
+      },
+      "metrics": {
+        "largest-contentful-paint": 1334.832007495117,
+        "cumulative-layout-shift": 0.001490514897910731,
+        "total-blocking-time": 98
+      }
+    },
+    {
+      "page": "detalhe",
+      "mode": "mobile",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100,
+        "agentic-browsing": 100
+      },
+      "metrics": {
+        "largest-contentful-paint": 1316.9276945526126,
+        "cumulative-layout-shift": 0,
+        "total-blocking-time": 40.88224220275879
+      }
+    }
+  ]
+}

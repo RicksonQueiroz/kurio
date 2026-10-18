@@ -1,0 +1,302 @@
+{
+  "measuredAtUTC": "2026-10-18T16:38:25.092Z",
+  "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+  "versions": {
+    "node": "v24.12.0",
+    "playwright": "1.64.1",
+    "lighthouse": "13.5.0",
+    "vite": "8.3.4",
+    "typescript": "6.0.3"
+  },
+  "lockfileSHA256": "7d8486217ff1f1cd0cd4882e9f9043ca8ef8af794db2e765d1a85d1325ebc912",
+  "files": [
+    {
+      "path": "assets/account-CRr086gj.js",
+      "sha256": "506e55c7e65657d00ac2fbd33bcd2500730f349e67781c00341052677bbd81f7"
+    },
+    {
+      "path": "assets/AccountFields-CPkJZr0p.js",
+      "sha256": "527e7362bbb6bd1978816819a02b58e676c15b589c3481454deef08a76112e0a"
+    },
+    {
+      "path": "assets/AccountQueryFeedback-BofxCOSQ.js",
+      "sha256": "5b58aaf3f0c64f3d64072b3f511d6d54ed91684a3aa2687309a3a6a1f90a4fcc"
+    },
+    {
+      "path": "assets/accountStorage-CJQayTIm.js",
+      "sha256": "93bf85b497d3e9e1e33d0f5f64a4a0d780d8e10c0291ea5f1cd5a563b1e1b9a2"
+    },
+    {
+      "path": "assets/apiFormError-DfbFxXoG.js",
+      "sha256": "374b0f90f5af9d30348981db625ca73eef780e8e0b5367f30d18d3d1039c6303"
+    },
+    {
+      "path": "assets/App-B14OwZFF.js",
+      "sha256": "013065cc3bb4e0032521b2a857d96fde16c5a1ba80c21440e85d18a3022b71a3"
+    },
+    {
+      "path": "assets/auth-store-D8BCsEiM.js",
+      "sha256": "91fc9c8ba4bbd8c53364d2d38a3eec8b98c92b8ec3122562040a2b519dea18b6"
+    },
+    {
+      "path": "assets/browser-xMZSKwau.js",
+      "sha256": "8e60c118af6d3a520cfe5d11889839438b20ad4f958ca1a4ff742c3b4d8da00a"
+    },
+    {
+      "path": "assets/Cart-BF3shH1l.js",
+      "sha256": "cf556d17f23232a3f094fb844db6e482ed6f0d5e26dad5da92b08800c950d0c6"
+    },
+    {
+      "path": "assets/CartFeedback-gp7MhpFM.js",
+      "sha256": "d6b4390b6855df19a2ed9f81b7245c54a9347795ad370d81ed3a34b77a9fcf45"
+    },
+    {
+      "path": "assets/createLucideIcon-D1IyRlsO.js",
+      "sha256": "f5ff2cd44c018b9049bc19984ec24a93a56b95b8353ccfb84da797ae7375e1e1"
+    },
+    {
+      "path": "assets/esm-wCv_9itW.js",
+      "sha256": "98fa7e1922f8638d8aeb6dc99a84387591e5205159cb37ed3d958977cd9ce64c"
+    },
+    {
+      "path": "assets/Favorites-zhvJHYH5.js",
+      "sha256": "3158e9c95300c2b1cc303870143373c8a5728b86bb19aeb51ce3ad27c82012f0"
+    },
+    {
+      "path": "assets/FormWithFeedback-Btq7WD8I.js",
+      "sha256": "8ef7f38c52e113d8376e10c397ae4cd3c98b6156bfc622985cea95cd7b9aa7d6"
+    },
+    {
+      "path": "assets/index-0gpur8Pc.css",
+      "sha256": "ad3460ceb51b7847f8c267b7a00413069a6a46154d8ec5f27a3f6c0010868c36"
+    },
+    {
+      "path": "assets/index-D3sv7Mhb.js",
+      "sha256": "a72f80d3d7da66973ef0c0a4444c3b2b779c2c0c201d2fdeab63efca203e6576"
+    },
+    {
+      "path": "assets/NFTDetailsQuery-CWjkp3Gw.js",
+      "sha256": "7d19505cde8afbf4622565a575112d19428e1adafa6c8ee28d05f530a4c67c68"
+    },
+    {
+      "path": "assets/nfts-C2Y8Rkjp.js",
+      "sha256": "7934c5fe54094833c28c3c2966880ec79e646316af57c66b262bc826e7bc7ecf"
+    },
+    {
+      "path": "assets/Payment-DGGj7GPn.js",
+      "sha256": "bb945890a8d51e61a52ef1d21c5e29dca5f291d14a4ecb12f672658e2daeb64d"
+    },
+    {
+      "path": "assets/Profile-Bu1wjKJt.js",
+      "sha256": "9576df9d6edab5df571c8b75f78fd64bdaf0303cb38e0a9190718e03aa8759fb"
+    },
+    {
+      "path": "assets/roboto-mono-cyrillic-ext-wght-normal-BUDPrIko.woff2",
+      "sha256": "6d72c2150c28b5305e7bfd0290edcf6038e556a9dd11a6ef15a1652548a35693"
+    },
+    {
+      "path": "assets/roboto-mono-cyrillic-wght-normal-HUlVHixE.woff2",
+      "sha256": "4052cc0b0f8b1b39da6cfaf90460f8b3c84dfc4b7562e9308ffa0998c3b9a005"
+    },
+    {
+      "path": "assets/roboto-mono-greek-wght-normal-BJJTbwTT.woff2",
+      "sha256": "308f763acd5f648b0556c1f79b848102f494d0450072cfd2fd8064ddf287f4f8"
+    },
+    {
+      "path": "assets/roboto-mono-latin-ext-wght-normal-QAYlOegK.woff2",
+      "sha256": "4cc0d52e0fa37c28084e0cbce3589a8ab32dd21e6ea619489c5f7c6e8c43b922"
+    },
+    {
+      "path": "assets/roboto-mono-latin-wght-normal-CZtBPCCa.woff2",
+      "sha256": "b81cd55177300649be8f95b3b747d721ce607e8ed2856e25bd0c630cfd631faf"
+    },
+    {
+      "path": "assets/roboto-mono-vietnamese-wght-normal-DlC-zuDL.woff2",
+      "sha256": "a4f562a288609dcb8f13e2b52296f1f3360957f09060735d4f00b5886e5bc7e0"
+    },
+    {
+      "path": "assets/rolldown-runtime-XKyaHtl9.js",
+      "sha256": "548d1dbf321e7d2ae804fcc158b588706a7c52f8ca175de1490c6ccb4dbe55b7"
+    },
+    {
+      "path": "assets/useMatch-BvkTdV32.js",
+      "sha256": "722397d38479b7af7aadc86f2841f64caf719e22c884923c287c7f003c2175d3"
+    },
+    {
+      "path": "assets/Wallets-Blh3RnCZ.js",
+      "sha256": "6d6e32275913aff5f7ac79b7ae303b42e2b144c60976dfb5ea225dc01988a6d5"
+    },
+    {
+      "path": "assets/x-Bf6lTtre.js",
+      "sha256": "2913c14e221d710c80cfa146f47784872ae6dfdae264fecb5639ccfc906a5a02"
+    },
+    {
+      "path": "favicon.svg",
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "icons.svg",
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    {
+      "path": "icons/arrow2.svg",
+      "sha256": "dd000f405a334c72c2c709a54f997b3e67e721ce39d15668dac2531adfc23754"
+    },
+    {
+      "path": "icons/auth/Facebook1.svg",
+      "sha256": "87d7fc1e01563aa853452493d82570b1250452a80f1349b233369b79f977309d"
+    },
+    {
+      "path": "icons/auth/Google1.svg",
+      "sha256": "c64348fa44c3d90a8bedc498ae6762d920a8f3fc6ff9eaddc216ac73b5dd181e"
+    },
+    {
+      "path": "icons/cart.png",
+      "sha256": "1cf63ea54ac1538750b169dad1045a39e77a97e8b6b926659d75283e5728dd2c"
+    },
+    {
+      "path": "icons/CentralButtonIcon.svg",
+      "sha256": "57ca93251e349796ee12359110ec6b890bfbf87d52e5e1fcbd46e9e1353b8a7c"
+    },
+    {
+      "path": "icons/email.svg",
+      "sha256": "20d9437ad3a4200f186ff7c5c8a55d7bf823078b7be38b7b36f98898119e0cee"
+    },
+    {
+      "path": "icons/favorites.svg",
+      "sha256": "87af91a069a9e775d04d7e4c9fc14224936eb7704a4736b67657d4912532ed28"
+    },
+    {
+      "path": "icons/Filter.svg",
+      "sha256": "3aa8f24c26f3c763e888d36c0e2b31bc0333d8042c772af27db945caf103d6b4"
+    },
+    {
+      "path": "icons/heart1.svg",
+      "sha256": "143785bf99fc3c769f544640848a6756f32257c56eb0159ae5dc3794b1045eb7"
+    },
+    {
+      "path": "icons/Home.svg",
+      "sha256": "221793fbc6bf9bc89b3414423c44d4566f9ea8e2028885dc71d8e4ddf858d9c6"
+    },
+    {
+      "path": "icons/linkedin.svg",
+      "sha256": "ba66b7b87904c1b4dbd4aa3d2c9ad3184cd377fbac7be2da5538cca9fc3180e8"
+    },
+    {
+      "path": "icons/login.png",
+      "sha256": "46026c8b49fc2d68c6bbda8855bd369f7de038e982f19c69276ed764004af667"
+    },
+    {
+      "path": "icons/rede/Facebook.svg",
+      "sha256": "77e65d5b8062ac3c5f378815f56af4363fe729874131e85911ee879cafea0f86"
+    },
+    {
+      "path": "icons/rede/Instagram.svg",
+      "sha256": "31725191aee8abed8b17eec1aea97b23b5e17ef9141dda20d7b044315628fcd7"
+    },
+    {
+      "path": "icons/rede/Linkedin.svg",
+      "sha256": "b3759fe8d043ff15883feb071e138de66d4e5f7e9175aa080d5747926fd1ec85"
+    },
+    {
+      "path": "icons/rede/Twitter.svg",
+      "sha256": "257c595960d18623e2a33a7a61dfa42badb635c50fc91565c2b7b5e9529c1b02"
+    },
+    {
+      "path": "icons/rede/Union.svg",
+      "sha256": "855cc34647877f60debc168ff7c9a07b06aed0c34a2f4c30811b5ba40747aa8d"
+    },
+    {
+      "path": "icons/Search.svg",
+      "sha256": "f5e374cf1163f4deedea16f7ae0924ccb9563ee9efc403ed2c58778959af9d29"
+    },
+    {
+      "path": "icons/seta.svg",
+      "sha256": "585ecccb104fdfa58a0d4e0794b6814a7de746a7b1dd3a4f8c1472ae37d85a81"
+    },
+    {
+      "path": "icons/Shop.svg",
+      "sha256": "934861c7c2b6f1309970e1f3bbd0168b2869f046c2a6098f7fdf2edbf69233b9"
+    },
+    {
+      "path": "icons/shopmobile.svg",
+      "sha256": "934861c7c2b6f1309970e1f3bbd0168b2869f046c2a6098f7fdf2edbf69233b9"
+    },
+    {
+      "path": "icons/TabBarBackground.svg",
+      "sha256": "1401d0dd633e9b259e349922b4c9434a6338ffb5ed5eef546221af8c0890a4a1"
+    },
+    {
+      "path": "icons/thank-you.svg",
+      "sha256": "3d4da76c34276ec3f618201272f8ab8714502a3b40047cc47fd39b7c37f16cde"
+    },
+    {
+      "path": "icons/twitter.svg",
+      "sha256": "2322c37ca2d688bdce788b78155f15665e81c074602de7318f1d139d9002dd4d"
+    },
+    {
+      "path": "icons/User.svg",
+      "sha256": "339fce12381dfa9c71360bfc741d9cce916424f12d0d1c12f8daa182d6321fca"
+    },
+    {
+      "path": "images/hero/Frame136.png",
+      "sha256": "eca9bfbbd1387fd46c614399e4480ed8ce662596076082dc0f14617760f910d2"
+    },
+    {
+      "path": "images/hero/Frame136.webp",
+      "sha256": "43fbaa00f214b5e1f4a6bf95d8ec6786b5a6f821c943e08b4c911c15bade5f8a"
+    },
+    {
+      "path": "images/hero/mobile-background.svg",
+      "sha256": "6c6678f98575fc16acc1fbce060c2b806e1d9d4d29d6693593fc4a5a8e224641"
+    },
+    {
+      "path": "images/hero/sage.svg",
+      "sha256": "820c39a34c3234db38f991a940aec998a00644a89e10eef37a3d29bc49fb15f4"
+    },
+    {
+      "path": "images/hero/sage.webp",
+      "sha256": "d9d81de7d4c42425ddc7ca00e812118b7f09fc432c07582c1600da7528efa9da"
+    },
+    {
+      "path": "images/nfts/emerald-ape.png",
+      "sha256": "eca9bfbbd1387fd46c614399e4480ed8ce662596076082dc0f14617760f910d2"
+    },
+    {
+      "path": "images/nfts/emerald-ape.webp",
+      "sha256": "43fbaa00f214b5e1f4a6bf95d8ec6786b5a6f821c943e08b4c911c15bade5f8a"
+    },
+    {
+      "path": "images/nfts/golden-beat.svg",
+      "sha256": "5bdeb1a0c7bc14975ae7234438da88ba3717ce7c88d2bc160db28f8231c0b73d"
+    },
+    {
+      "path": "images/nfts/golden-beat.webp",
+      "sha256": "f8a184be747c5372b23b78bafda9a87e9b8eecbf986d30728f8c2f369bea762b"
+    },
+    {
+      "path": "images/nfts/neon-vessel.svg",
+      "sha256": "ceea5964e1e45cbc5d904b98be238241bb55c38c30cfa187b469a77dc5930e58"
+    },
+    {
+      "path": "images/nfts/neon-vessel.webp",
+      "sha256": "93cadd37e760a8f8b197e9bee30e8a87e9cd743ffbf542537d7c6ce488b2d8e4"
+    },
+    {
+      "path": "images/nfts/sage-nomad.svg",
+      "sha256": "820c39a34c3234db38f991a940aec998a00644a89e10eef37a3d29bc49fb15f4"
+    },
+    {
+      "path": "images/nfts/sage-nomad.webp",
+      "sha256": "52853fc3caea878feead87c08f6bb74c21771f71ab4bb17107c1344edcd57005"
+    },
+    {
+      "path": "index.html",
+      "sha256": "ed2a3c05368f95fc1fbec3a69c95f3b4f7b963d47316620fa8a37b4467dc476e"
+    },
+    {
+      "path": "mockServiceWorker.js",
+      "sha256": "26171599d94d5445297303f3a1f1cedec26835ea3d0057dcfa92ec520cb35cca"
+    }
+  ]
+}

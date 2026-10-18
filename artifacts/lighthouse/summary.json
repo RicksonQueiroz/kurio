@@ -1,0 +1,242 @@
+[
+  {
+    "page": "inicio",
+    "mode": "desktop",
+    "run": 1,
+    "url": "http://127.0.0.1:4173/?page=1",
+    "scores": {
+      "performance": 91,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1120.5128155944824,
+      "cumulative-layout-shift": 0.0007906155508535879,
+      "total-blocking-time": 206.6182632446289
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "inicio",
+    "mode": "desktop",
+    "run": 2,
+    "url": "http://127.0.0.1:4173/?page=1",
+    "scores": {
+      "performance": 92,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1084.1862155944825,
+      "cumulative-layout-shift": 0.0007906155508535879,
+      "total-blocking-time": 203.61826324462902
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "inicio",
+    "mode": "desktop",
+    "run": 3,
+    "url": "http://127.0.0.1:4173/?page=1",
+    "scores": {
+      "performance": 96,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1093.1969155944823,
+      "cumulative-layout-shift": 0.0007906155508535879,
+      "total-blocking-time": 132.24034999999992
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "detalhe",
+    "mode": "desktop",
+    "run": 1,
+    "url": "http://127.0.0.1:4173/nft/042",
+    "scores": {
+      "performance": 95,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1466.6402678100585,
+      "cumulative-layout-shift": 0.00008591206868489584,
+      "total-blocking-time": 26.38224220275879
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "detalhe",
+    "mode": "desktop",
+    "run": 2,
+    "url": "http://127.0.0.1:4173/nft/042",
+    "scores": {
+      "performance": 95,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1240.8269155944824,
+      "cumulative-layout-shift": 0.00008591206868489584,
+      "total-blocking-time": 132.50050544738758
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "detalhe",
+    "mode": "desktop",
+    "run": 3,
+    "url": "http://127.0.0.1:4173/nft/042",
+    "scores": {
+      "performance": 94,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1322.2545155944827,
+      "cumulative-layout-shift": 0.00008591206868489584,
+      "total-blocking-time": 137.0005054473877
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "inicio",
+    "mode": "mobile",
+    "run": 1,
+    "url": "http://127.0.0.1:4173/?page=1",
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1332.0906074951172,
+      "cumulative-layout-shift": 0.001490514897910731,
+      "total-blocking-time": 96.38224220275879
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "inicio",
+    "mode": "mobile",
+    "run": 2,
+    "url": "http://127.0.0.1:4173/?page=1",
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1356.4292074951172,
+      "cumulative-layout-shift": 0.001490514897910731,
+      "total-blocking-time": 98
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "inicio",
+    "mode": "mobile",
+    "run": 3,
+    "url": "http://127.0.0.1:4173/?page=1",
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1334.832007495117,
+      "cumulative-layout-shift": 0.001490514897910731,
+      "total-blocking-time": 99
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "detalhe",
+    "mode": "mobile",
+    "run": 1,
+    "url": "http://127.0.0.1:4173/nft/042",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1316.9276945526126,
+      "cumulative-layout-shift": 0,
+      "total-blocking-time": 54.38224220275879
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "detalhe",
+    "mode": "mobile",
+    "run": 2,
+    "url": "http://127.0.0.1:4173/nft/042",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1315.1110695526124,
+      "cumulative-layout-shift": 0,
+      "total-blocking-time": 36.88224220275879
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  },
+  {
+    "page": "detalhe",
+    "mode": "mobile",
+    "run": 3,
+    "url": "http://127.0.0.1:4173/nft/042",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "agentic-browsing": 100
+    },
+    "metrics": {
+      "largest-contentful-paint": 1321.0186945526123,
+      "cumulative-layout-shift": 0,
+      "total-blocking-time": 40.88224220275879
+    },
+    "lighthouseVersion": "13.5.0",
+    "runtimeError": null
+  }
+]

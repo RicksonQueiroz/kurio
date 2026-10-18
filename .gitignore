@@ -1,0 +1,41 @@
+# Logs gerados durante desenvolvimento e execução dos testes.
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependências instaladas e builds reproduzíveis pelos comandos do projeto.
+node_modules
+dist
+dist-ssr
+*.tsbuildinfo
+
+# Variáveis locais ficam fora do repositório; o exemplo documentado acompanha a entrega.
+.env
+.env.*
+!.env.example
+
+# Configuração local criada pela CLI da Vercel.
+.vercel/
+
+# Preserva os relatórios exigidos; exclui cópias de verificação e arquivos temporários.
+artifacts/*
+!artifacts/lighthouse/
+!artifacts/playwright-report/
+/playwright-report/
+/test-results/
+*.local
+
+# Preferências pessoais de editores e arquivos do sistema operacional.
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,0 +1,188 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./vendor/shadcn/tailwind.css";
+/* As classes responsivas seguem os limites de largura fornecidos pelo Tailwind. */
+
+/* Importa a fonte oficial utilizada no Figma. */
+@import "@fontsource-variable/roboto-mono";
+@custom-variant dark (&:is(.dark *));
+
+/* Skeleton mantém as proporções dos cards e respeita movimento reduzido. */
+.catalog-skeleton {
+  background: linear-gradient(100deg, #241612 25%, #3f2319 45%, #241612 65%);
+  background-size: 200% 100%;
+  animation: catalog-shimmer 1.4s linear infinite;
+}
+@keyframes catalog-shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .catalog-skeleton { animation: none; background: #241612; }
+}
+
+/* O contorno aparece por teclado e permanece visível sobre as superfícies escuras do Figma. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #E89B55;
+  outline-offset: 3px;
+}
+:where(button:disabled, a[aria-disabled="true"]) { opacity: 0.55; cursor: not-allowed; }
+
+/* Os campos vazios precisam de limites distinguíveis sobre o fundo; o tom continua na paleta marrom. */
+:where(input:not([type="radio"]):not([type="checkbox"]):not([type="range"]):not([type="file"]), select, textarea) { border-color: #8F6D4D; }
+:where(input, select, textarea):focus-visible, :where(input, select, textarea)[aria-invalid="true"] { border-color: #E89B55; }
+
+/* Atalho disponível ao teclado; não ocupa espaço na composição visual quando está sem foco. */
+.skip-link { position: fixed; left: 12px; top: 12px; z-index: 200; transform: translateY(-200%); background: #D28A4C; color: #140D0A; padding: 12px 16px; border-radius: 6px; }
+.skip-link:focus { transform: none; }
+
+/* Cobre também transições de utilitários e rolagem, além do shimmer desativado acima. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+:root {
+  /* Define a Roboto Mono como fonte principal da Kurio. */
+  font-family: "Roboto Mono Variable", monospace;
+  color: #f5eee9;
+  background-color: #140d0b;
+  font-synthesis: none;
+  /* Fundo escuro da aplicação Kurio.
+   Valor provisório até confirmarmos o token de fundo no Figma. */
+  --background: #140d0b;
+
+  /* Cor principal dos textos, confirmada no Figma. */
+  --foreground: #f5f1eb;
+  /* Tokens de superfície: cores de cartões, diálogos e texto sobre essas áreas. */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  /* Cores das ações reutilizáveis, acompanhadas de cores de texto correspondentes. */
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  /* Borda, campo e anel de foco compartilhados pelos controles da biblioteca. */
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  /* Paleta disponibilizada pelo tema; estes valores não são dados de NFTs. */
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  /* Tokens disponíveis para barras laterais que utilizem o tema shadcn. */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+body {
+  margin: 0;
+  /* Limita a largura mínima ao espaço disponível: em telas de 320px,
+     a barra de rolagem vertical não deve criar rolagem horizontal. */
+  min-width: min(320px, 100%);
+}
+
+@theme inline {
+  /* Faz as classes font-sans e font-heading usarem a fonte do Figma. */
+  --font-sans: "Roboto Mono Variable", monospace;
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  /* Tokens de superfície: cores de cartões, diálogos e texto sobre essas áreas. */
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  /* Cores das ações reutilizáveis, acompanhadas de cores de texto correspondentes. */
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  /* Borda, campo e anel de foco compartilhados pelos controles da biblioteca. */
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  /* Paleta disponibilizada pelo tema; estes valores não são dados de NFTs. */
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  /* Tokens disponíveis para barras laterais que utilizem o tema shadcn. */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
