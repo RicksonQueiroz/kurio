@@ -107,6 +107,4 @@ As metas foram atingidas nas quatro combinações. HTML/JSON das 12 execuções,
 
 Na Vercel, importe o repositório como **Vite**, use Node **24.x**, instalação `npm ci`, build `npm run build` e saída `dist`. Mantenha `VITE_ENABLE_MOCKS=true`. `vercel.json` contém o fallback de rotas e os headers do Service Worker.
 
-Após publicar, registre a URL neste README e confira acesso direto/refresh, autenticação, compra e eventos no endereço HTTPS.
-
 Contratos REST/eventos, cache, sessão, decisões de UX e limitações estão em [ARCHITECTURE.md](./ARCHITECTURE.md), conforme exigido no enunciado.
