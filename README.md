@@ -1,58 +1,58 @@
 # Kurio — marketplace de NFTs
 
-Desafio Frontend Jungle Gaming em React/TypeScript. Descoberta, compra e conta usam dados fictícios por REST/MSW e protocolo Socket.IO. Não há blockchain, assinatura de carteira ou pagamento real.
+Desafio Frontend da Jungle Gaming em React e TypeScript. Catálogo, carrinho, compra e conta funcionam com API REST e eventos Socket.IO simulados pelo MSW. Não há pagamento ou conexão real com blockchain.
+
+[Repositório](https://github.com/RicksonQueiroz/kurio) · Deploy: pendente de publicação.
 
 ## Executar
 
-Node.js 22.18+ e npm; ambiente validado com Node 24.12.
+Use Node.js 24 e npm. Em uma cópia nova do repositório:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Abra o endereço do Vite. Mocks estão habilitados por padrão também no build; `.env.example` documenta as variáveis opcionais. Service Workers exigem localhost ou HTTPS.
+Abra o endereço mostrado pelo Vite. O Service Worker exige `localhost` ou HTTPS; para acessar pelo celular, use a URL HTTPS publicada.
 
-```sh
-npm run typecheck
-npm run lint
-npm test
-npm run build
-npm run preview
-```
+As opções estão em `.env.example`:
 
-`npm start` serve o build na porta 4173 (ou `PORT`). A demonstração não precisa de servidor REST/Socket.IO externo: MSW e `@mswjs/socket.io-binding` interceptam os transportes no navegador.
+| Variável | Padrão e finalidade |
+| --- | --- |
+| `VITE_ENABLE_MOCKS` | Mocks ativos por padrão; mantenha `true` na demonstração |
+| `VITE_API_URL` | `/api`; opcional para um backend REST compatível |
+| `VITE_REALTIME_URL` | Mesma origem; opcional para um servidor Socket.IO compatível |
 
-## Contas fictícias e fluxo
+A demonstração não depende de backend externo. Configure `VITE_ENABLE_MOCKS=false` somente se fornecer os dois serviços compatíveis.
 
-| E-mail | Senha |
-|---|---|
+## Contas e fluxo de compra
+
+| E-mail fictício | Senha |
+| --- | --- |
 | `nova@example.com` | `Kurio123!` |
 | `sage@example.com` | `Kurio123!` |
 
-Também é possível criar conta. A sessão dura 30 minutos. Senhas ficam como hash PBKDF2 com salt; recursos privados são separados por usuário.
+Também é possível cadastrar uma conta. Escolha um NFT e edição, adicione ao carrinho e autentique-se. Cadastre uma carteira em `/wallets`, conecte-a no pagamento, revise os dados e confirme. Para Ethereum/Polygon, use um endereço fictício com `0x` e 40 caracteres hexadecimais. O recibo confirmado pode ser retomado por `/payment?order=<id>` após refresh.
 
-Explore o catálogo, combine filtros e abra um NFT. Escolha edição/quantidade e adicione ao carrinho. Visitantes mantêm os itens ao entrar. Cadastre uma carteira em `/wallets`, conecte-a no pagamento, revise valores e confirme. O desktop exige os campos do colecionador. Use somente dados fictícios; endereço Ethereum/Polygon deve conter `0x` + 40 caracteres hexadecimais.
+Cupom `KURIO10`: desconto de 10%. `EXPIRADO` reproduz cupom vencido; outros códigos são inválidos.
 
-O recibo só abre para um pedido confirmado pela API. `/payment?order=<id>` recupera o snapshot após refresh. Recusas preservam itens; confirmação subtrai só a quantidade comprada. ETH trafega como string decimal e é calculado em wei com `bigint`. `KURIO10` concede 10% de desconto; `EXPIRADO` testa vencimento de cupom.
+## Cenários de avaliação
 
-## Cenários reproduzíveis
+Use `?mockScenario=<nome>` na rota ou o header `x-kurio-scenario` nos testes HTTP:
 
-Use `?mockScenario=<nome>` na rota, ou o header `x-kurio-scenario` nos testes HTTP:
-
-| Cenário | Resultado |
-|---|---|
-| `default`, `empty`, `slow` | Normal, catálogo vazio ou latência de 1,8 s |
+| Cenário | Comportamento |
+| --- | --- |
+| `default`, `empty`, `slow` | Sucesso, catálogo vazio ou latência de 1,8 s |
 | `error`, `offline`, `mutation-error` | HTTP 503, falha de conexão ou de escrita |
-| `out-of-order` | Latência variável na busca |
-| `session-expired` | Sessão inválida e retomada da autenticação |
-| `price-changed`, `stock-exhausted`, `catalog-default` | Condições controladas da cotação |
-| `wallet-rejected` | Conexão recusada |
-| `order-declined`, `order-pending`, `order-timeout` | Pedido recusado, pendente por um minuto ou resposta inicial perdida |
+| `out-of-order` | Respostas de busca com latência variável |
+| `session-expired` | Reautenticação preservando o destino; remova o parâmetro para entrar novamente |
+| `price-changed`, `stock-exhausted`, `catalog-default` | Altera preço, esgota edição ou restaura a referência do catálogo |
+| `wallet-rejected` | Recusa a conexão simulada |
+| `order-declined`, `order-pending`, `order-timeout` | Pedido recusado, pendente por um minuto ou resposta perdida após criação |
 
-Depois de `order-timeout`, use **Recuperar tentativa**, inclusive após refresh. Chave e corpo originais são preservados; o mesmo reenvio recupera o mesmo pedido.
+Em `order-timeout`, use **Recuperar tentativa**, inclusive após refresh: a chave e o corpo originais recuperam o mesmo pedido. Falhas preservam os itens.
 
-No console da aplicação, ou no setup dos testes, dispare eventos reais pelo cliente Socket.IO:
+Para disparar alterações pelo Socket.IO, execute no console da aplicação:
 
 ```js
 await fetch('/api/mock/events', {
@@ -62,55 +62,51 @@ await fetch('/api/mock/events', {
 })
 ```
 
-Aceita `price-changed`, `stock-exhausted`, `duplicate`, `out-of-order`, `disconnect` e `reset`. O mock altera o recurso, emite o evento e a interface reconcilia pela API; não há simulação por setters da UI.
-
-Reset completo das fixtures da origem atual:
+O endpoint aceita `price-changed`, `stock-exhausted`, `duplicate`, `out-of-order`, `disconnect` e `reset`. Para restaurar integralmente as contas, catálogo, carrinhos, pedidos e rascunhos fictícios:
 
 ```js
 await fetch('/api/mock/reset', { method: 'POST' })
 location.assign('/')
 ```
 
-Remove dados fictícios criados, sessões, carrinhos, pedidos, perfil, carteiras, favoritos e rascunhos do Kurio, restaurando as contas iniciais.
+## Verificações
 
-## Playwright e regressão visual
+| Comando | Finalidade |
+| --- | --- |
+| `npm run typecheck` | TypeScript |
+| `npm run lint` | Análise estática |
+| `npm test` | Regras e contratos HTTP |
+| `npm run build` | TypeScript e build em `dist` |
+| `npm run preview` | Prévia local do build |
+| `npm start` | Servidor estático na porta 4173 ou `PORT` |
+| `npm run test:e2e` | Playwright e regressão visual |
+| `npm run audit:lighthouse` | Auditoria de início/detalhe em desktop/mobile |
 
-```sh
-npx playwright install chromium
-npm run build
-npm run test:e2e
-```
+Para os E2E, execute `npx playwright install chromium` e `npm run build` antes de `npm run test:e2e`. A suíte serve o build e usa contextos isolados em 390, 768 e 1440 px. Relatório: `artifacts/playwright-report/index.html`; traces de falhas: `artifacts/playwright-results`; baselines: `e2e/kurio.spec.ts-snapshots`. Atualizações intencionais usam `npm run test:visual:update`, revisão das imagens e nova execução sem atualizar.
 
-A configuração serve o build e executa Chromium em 1440, 768 e 390 px, com contextos isolados. A suíte cobre descoberta/URL, detalhe/404, conta/sessão, favoritos/falha, carrinho/cupom, pedidos, timeout, recusa, perfil/avatar/senha, carteiras, teclado, skeletons e Socket.IO. Relatório HTML: `artifacts/playwright-report/index.html`. Traces de falha: `artifacts/playwright-results`.
+O zoom usa um perfil temporário do Chromium completo, com alternativa registrada para Edge no Windows. `KURIO_ZOOM_CHANNEL` seleciona explicitamente o canal. Os demais fluxos usam Chromium. Para testar o Vite em vez do build, defina `E2E_SERVER=dev` (PowerShell: `$env:E2E_SERVER='dev'; npm run test:e2e`).
 
-Baselines em `e2e/kurio.spec.ts-snapshots`. Para alteração visual intencional: `npm run test:visual:update`, revisão das imagens e nova execução sem atualizar. As referências usam Chromium no Windows; diferenças entre sistemas precisam de revisão explícita.
-
-Para conferir os mesmos fluxos no servidor de desenvolvimento, use `E2E_SERVER=dev` ao executar o Playwright (PowerShell: `$env:E2E_SERVER='dev'; npm run test:e2e`). Sem essa variável, a configuração testa o build. O fallback MSW captura somente `/api/` na raiz, preservando os módulos `/src/api/` servidos pelo Vite.
-
-`e2e/accessibility.spec.ts` verifica reflow nas sete rotas, shimmer com movimento reduzido e zoom real de 200%, incluindo compra e recibo. O zoom roda uma vez, no projeto desktop, com extensão local sem permissões em um perfil descartável. Usa Chromium completo; se ele não iniciar no Windows, tenta o Edge instalado e registra essa alternativa no relatório. Os fluxos dos três projetos continuam usando o Chromium padrão do Playwright. `KURIO_ZOOM_CHANNEL` permite selecionar explicitamente o navegador compatível. A extensão não faz parte do build nem altera seu perfil pessoal.
+Validação local em 18/10/2026: TypeScript/build e lint aprovados, **30 testes de regras e 48 E2E aprovados**. Três entradas são puladas por viewport: zoom desktop não se repete no tablet/mobile, e o Header desktop não aparece no mobile.
 
 ## Lighthouse
 
-Depois do build, em dois terminais:
+Execute `npm run build`, mantenha `npm start` em um terminal e rode `npm run audit:lighthouse` em outro. São três medições por página e perfil, com mocks completos e throttling simulado padrão; o armazenamento é preservado para o Service Worker.
 
-```sh
-npm start
-npm run audit:lighthouse
-```
+Medianas do build atual, medidas em 18/10/2026:
 
-Audita início/detalhe nos perfis desktop/mobile, três vezes por combinação, com mocks e assets completos. HTML/JSON, LCP/CLS/TBT, ambiente e medianas ficam em `artifacts/lighthouse`. Veja as [medições finais e condições de reprodução](./docs/PERFORMANCE.md).
+| Página/perfil | Performance | Acessibilidade | Boas práticas | SEO | LCP | CLS | TBT |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Início desktop | 92 | 100 | 100 | 100 | 1093 ms | 0,00079 | 204 ms |
+| Detalhe desktop | 95 | 100 | 100 | 100 | 1322 ms | 0,00009 | 133 ms |
+| Início mobile | 99 | 100 | 100 | 100 | 1335 ms | 0,00149 | 98 ms |
+| Detalhe mobile | 100 | 100 | 100 | 100 | 1317 ms | 0 | 41 ms |
 
-## Publicação
+As metas foram atingidas nas quatro combinações. HTML/JSON das 12 execuções, amostras, medianas e hashes do build estão em `artifacts/lighthouse`. Ambiente: Windows 11, Ryzen 5 5500, Node 24.12.0, Playwright 1.64.1, Chromium 156.0.8078.4, Vite 8.3.4 e Lighthouse 13.5.0. Viewports: 1440 × 1000 e 390 × 900. As pontuações podem variar em outra máquina ou após publicação.
 
-O build é estático (`dist`). `vercel.json` configura build e fallback de SPA preservando assets e Service Worker. Use `npm run build`, saída `dist` e mocks habilitados. O binding MSW/Socket.IO dispensa serviços privados externos. Valide HTTPS, acesso direto e refresh nas rotas publicadas.
+## Deploy
 
-Repositório remoto e URL pública ainda precisam ser definidos/publicados; não há deploy confirmado neste registro.
+Na Vercel, importe o repositório como **Vite**, use Node **24.x**, instalação `npm ci`, build `npm run build` e saída `dist`. Mantenha `VITE_ENABLE_MOCKS=true`. `vercel.json` contém o fallback de rotas e os headers do Service Worker.
 
-## Organização e decisões
+Após publicar, registre a URL neste README e confira acesso direto/refresh, autenticação, compra e eventos no endereço HTTPS.
 
-Veja o [registro de validação local antes do deploy](./docs/VALIDACAO-FINAL.md).
-Ele inclui a instalação em [cópia limpa](./docs/EXECUCAO-LIMPA.md) e a nova execução com as fontes finais: build/TypeScript, lint, 30 testes de regras e 48 E2E aprovados. Três entradas são puladas por projeto: zoom desktop não é repetido no tablet/mobile, e o Header desktop não aparece no mobile. A [revisão dos comentários](./docs/REVISAO-COMENTARIOS.md) explica o escopo da documentação do código.
-
-`src/api` contém contratos/transporte; `src/mocks`, fixtures/handlers/persistência/eventos; `src/contexts`, sessão/carrinho/filtros; `src/pages` e `src/components`, interface; `tests`, contratos/regras; `e2e`, testes e baselines.
-
-[ARCHITECTURE.md](./ARCHITECTURE.md) documenta cache, sessão, idempotência, eventos, assets, acessibilidade e desvios de UX/Figma. Contratos detalhados: [pedidos](./docs/PEDIDOS.md), [conta](./docs/CONTA.md), [catálogo](./docs/CATALOGO.md), [carrinho](./docs/CARRINHO.md) e [autenticação](./docs/AUTENTICACAO.md). Registros históricos não substituem os relatórios atuais.
+Contratos REST/eventos, cache, sessão, decisões de UX e limitações estão em [ARCHITECTURE.md](./ARCHITECTURE.md), conforme exigido no enunciado.

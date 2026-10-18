@@ -1,50 +1,80 @@
-# Arquitetura e decisões do Kurio
+# Arquitetura e decisões
 
-## Fluxo de dados
+## Organização e transporte
 
-A interface React/TypeScript usa TanStack Router para rotas e estado de descoberta na URL. Axios é o transporte REST único, com timeout de 10 segundos, identidade de visitante e token de sessão. TanStack Query controla consultas/mutations e separa dados privados pela chave `[recurso, userId, ...parâmetros]`.
+`src/api` define contratos e chamadas; `src/mocks` contém fixtures, bancos e handlers; `src/contexts` compartilha sessão, carrinho e filtros; `src/pages` e `src/components` compõem a interface. `tests` cobre regras/HTTP e `e2e` contém os fluxos Playwright e baselines.
 
-MSW intercepta a rede antes de montar React. Os handlers mantêm dados consistentes de catálogo, contas, carrinho, perfil, carteiras, favoritos e pedidos. A persistência local pertence à simulação da API. Rascunhos de formulário e diário de tentativa pertencem à interface e são separados por usuário. Não há integração real com blockchain, carteira ou pagamento.
+React/TypeScript usa TanStack Router para rotas, parâmetros e proteção dos fluxos privados. Busca, coleção, rede, preço, ordenação e página ficam na URL; alterar filtros reinicia a paginação. Axios é o cliente REST único, com timeout de 10 segundos e cancelamento por `AbortSignal`. TanStack Query controla consultas, mutations e reconciliação.
 
-## Sessão e isolamento
+MSW é iniciado antes de importar a aplicação. Dados fictícios e regras de negócio ficam nos handlers; sua persistência local sustenta o refresh no mesmo navegador/origem. O fallback captura apenas `/api/` na raiz, preservando os módulos `/src/api/` do Vite. Rascunhos e diário de compra são estados da interface separados por usuário. Fontes, imagens e fixtures estão disponíveis localmente.
 
-Duas contas fictícias exercitam conflito e troca de usuário. Senhas são derivadas com PBKDF2/SHA-256, salt por conta e 100 mil iterações; não ficam em texto no armazenamento. A sessão dura 30 minutos. Consulta de sessão e relógio local observam expiração. O interceptor trata 401 sem encerrar uma sessão nova por causa de uma resposta antiga.
+## Contratos REST
 
-Rotas privadas mantêm o destino enquanto pedem autenticação. Logout/troca cancelam consultas, limpam caches privados e liberam listeners/subscriptions. Expiração preserva o rascunho e a tentativa de compra da mesma conta. Trata-se de autenticação simulada; o armazenamento de token no navegador não é uma recomendação de arquitetura de segurança para produção.
+Os tipos completos estão em [src/api/contracts.ts](./src/api/contracts.ts) e os cadastros de conta em [src/lib/accountStorage.ts](./src/lib/accountStorage.ts). Recursos privados exigem `Authorization: Bearer <token>`; carrinho visitante usa `x-kurio-guest`.
 
-## Cache e mutations
+| Operação | Entrada e resposta |
+| --- | --- |
+| `POST /api/auth/register` | `{username,email,password}` → `{user,token,expiresAt}` |
+| `POST /api/auth/login` | `{email,password}` → `{user,token,expiresAt}` |
+| `GET /api/auth/session` | Token → `{user,expiresAt}` |
+| `POST /api/auth/logout`, `/api/auth/expire` | Token → 204; invalida ou vence a sessão |
+| `GET /api/nfts` | `q,collection,network,maxPrice,sort,page,pageSize` → itens, totais, páginas e contagens de filtros |
+| `GET /api/nfts/:id` | Identificador → NFT com versão e estoque por edição, ou 404 |
+| `GET /api/favorites` | → `{ids,items}` privados |
+| `PUT/DELETE /api/favorites/:id` | Inclui/remove favorito → `{ids}` |
+| `GET /api/cart` | Identidade → `CartResponse` |
+| `POST/PATCH /api/cart/items` | `{nftId,edition,quantity}` → `CartResponse`; adiciona ou substitui quantidade |
+| `DELETE /api/cart/items/:nftId/:edition` | Remove uma linha → `CartResponse` |
+| `DELETE /api/cart` | Esvazia itens e cupom → `CartResponse` |
+| `POST/DELETE /api/cart/coupon` | POST recebe `{code}`; aplica/remove → `CartResponse` |
+| `POST /api/quote` | Revalida carrinho → `CartResponse` com cotação atual |
+| `POST /api/orders` | `Idempotency-Key` e `OrderInput` → pedido pendente (202) ou tentativa existente |
+| `GET /api/orders/:id` | → estado e snapshot do pedido da própria conta |
+| `GET/PATCH /api/profile` | Consulta ou recebe `{profile,password?:{current,next}}` → perfil confirmado |
+| `GET /api/wallets` | → `{primary,secondary}` |
+| `PUT /api/wallets/:slot` | Cadastro da seção `primary` ou `secondary` → conjunto das carteiras |
+| `GET/POST/DELETE /api/wallets/connect` | Consulta/conecta/desconecta; POST recebe `{wallet,network}` |
+| `POST /api/mock/events` | `{scenario}` → altera o banco e emite eventos pelo socket |
+| `POST /api/mock/nfts/:id` | Controle de teste: altera `price` ou `edition` + `available` |
+| `POST /api/mock/reset` | Restaura integralmente as fixtures e os recursos privados da demonstração |
 
-Consultas de catálogo usam chave completa, sinal de cancelamento e stale time padrão de 30 segundos. Carrinho é revalidado na entrada/foco, após mutations, após eventos e por polling REST de contingência a cada 15 segundos. A alteração de quantidade antecipa o valor, invalida a cotação e restaura o snapshot anterior em falhas. O servidor é a referência de preço, cupom, estoque e taxas.
+Erros usam `{error:{code,message,fields?}}`. A simulação diferencia validação (422), sessão/credenciais inválidas (401), recurso inexistente ou de outra conta (404), conflitos (409), cupom vencido (410), indisponibilidade transitória (503) e falha de conexão. Endpoints desconhecidos da API retornam 501.
 
-Pedidos usam chave de idempotência e corpo persistidos antes do envio, não têm retry automático e podem ser recuperados pela mesma tentativa. O recibo só abre para estado confirmado. Seu snapshot não depende do catálogo depois da compra. A baixa remove somente a quantidade comprada e os estados confirmado/recusado são terminais. A URL identifica o pedido para refresh/acesso direto.
+`CartResponse` contém `items`, `version`, `notices` e `quote`. A cotação inclui `id`, `expiresAt`, `cartVersion`, subtotal, desconto, taxa, total, cupom, validade e impedimentos. ETH trafega como string decimal, com cálculos exatos em wei usando `bigint`; quantidades são inteiras. A API não aceita preços do cliente como referência. Carteiras validam campos, provedor e endereço de rede: hexadecimal para Ethereum/Polygon e base58 para Solana.
 
-## Eventos com MSW e Socket.IO
+## Sessão, cache e recuperação
 
-O cliente efetivo é `socket.io-client`, com transporte WebSocket e caminho `/kurio-socket/`. MSW intercepta a conexão e `@mswjs/socket.io-binding` codifica/decodifica Engine.IO/Socket.IO. Foi adotado MSW 2 por compatibilidade com o peer dependency do binding, sem forçar a árvore de dependências. A aplicação é importada depois de ativar o worker para o cliente capturar o WebSocket interceptado.
+Senhas fictícias são derivadas com PBKDF2/SHA-256, salt por conta e 100 mil iterações; não são persistidas em claro. A sessão dura 30 minutos e é recuperada pela API no refresh, no foco e a cada 30 segundos, com timer local para expiração. Um 401 antigo não encerra uma sessão mais recente. Checkout, perfil, carteiras, favoritos e pedidos exigem autenticação.
 
-- `nft.updated`: identificador do evento, NFT, versão, preço/edições e instante. O mesmo handler que altera o catálogo emite o evento.
-- `order.updated`: identificador do evento, pedido, usuário, versão e estado. Só é enviado às conexões cuja sessão foi resolvida pelo mock.
-- `session.subscribe`: cliente apresenta o token; o mock valida a conta e envia snapshot público e pedidos da própria conta. Uma versão da subscription impede resposta antiga de reassinar outra identidade.
+Chaves de consultas incluem usuário ou visitante e os parâmetros do recurso. Logout/troca cancelam consultas, removem caches privados, desmontam o estado anterior e liberam subscriptions. Login mescla o carrinho visitante uma vez. Expiração preserva destino, rascunho e tentativa da mesma conta; logout explícito remove rascunhos. Mudança do cadastro de carteira invalida sua conexão anterior.
 
-A interface descarta versões antigas/duplicadas e invalida as consultas REST afetadas. Na reconexão recebe snapshots e reconcilia recursos ativos. A troca de sessão fecha a conexão anterior. Timers e transições ficam nos mocks, sem callbacks de negócio fabricados na UI. O binding limita namespaces, binários e rooms; o projeto usa somente namespace raiz, eventos JSON e autorização explícita por conexão. Não é necessário servidor Socket.IO externo para executar/publicar a demonstração.
+O padrão de consultas é `staleTime: 30s`, um retry e sem refetch automático ao foco. Sessão, carrinho, detalhe e pedidos sobrescrevem o retry para zero. Sessão/carrinho/pedidos revalidam ao foco; carrinho também consulta a cada 15 segundos e pedido pendente a cada segundo. Mutations não têm retry automático. A quantidade do carrinho usa atualização otimista, marca a cotação como inválida e faz rollback em caso de falha. Eventos e mutations invalidam os recursos afetados.
 
-## UI, assets e desempenho
+A cotação vale cinco minutos e é renovada ao vencer ou mudar a seleção, preço ou estoque. O envio revalida cupom, taxa, disponibilidade e carteira conectada; conflito exige revisão e nova confirmação. A interface persiste a chave de idempotência e o corpo antes de enviar. Reenvio idêntico recupera o mesmo pedido; reutilizar a chave com outro conteúdo gera 409. Outra tentativa com pedido pendente retoma seu identificador.
 
-Tailwind e componentes shadcn/ui adaptados mantêm a identidade. O CSS auxiliar distribuído pelo shadcn 4.22.0 foi mantido localmente com licença em `src/vendor/shadcn`; a CLI de geração foi removida da execução, junto de dependências desnecessárias. Isso não remove os componentes da aplicação.
+Pedidos passam de `pending` para `confirmed` ou `declined`, ambos terminais. O recibo abre somente para confirmação da API, preserva o snapshot e usa referência fictícia `SIM-…`. Confirmação baixa estoque e subtrai apenas as quantidades compradas; recusas preservam os itens. A URL `/payment?order=<id>` e o diário por usuário permitem retomada após timeout, refresh ou reconexão.
 
-Os PNGs incorporados nos SVGs exportados tinham megabytes e elevado custo de decodificação. `scripts/optimize-assets.mjs` gera versões WebP dos mesmos rasters, com dimensão adequada e qualidade 90; os originais permanecem em `public/images`. Os caminhos de origem/destino estão no mapeamento do script. Não foram geradas novas artes. Rotas carregam código sob demanda e cards usam carregamento de imagem lazy.
+## Socket.IO e MSW
 
-## Decisões de UX e desvios do Figma
+O cliente efetivo é `socket.io-client`, com WebSocket em `/kurio-socket/`. MSW 2 e `@mswjs/socket.io-binding` interceptam e codificam o protocolo Engine.IO/Socket.IO. O caminho próprio evita a normalização especial de `/socket.io/`. A importação do cliente ocorre depois da ativação do worker. Não é necessário um servidor externo para a demonstração.
 
-- Contornos de foco, bordas de campos mais claras, erros associados e atalho para pular ao conteúdo.
-- Busca desktop, ordenação, paginação e gaveta mobile adicionadas para comportamentos obrigatórios; usam os mesmos tons e tipografia.
-- Contagens de coleção/rede são os totais reais das fixtures, em vez dos números ilustrativos.
-- A galeria usa a única arte disponível e recortes superior/central/inferior; não atribui imagens de outro NFT à obra.
-- Conexão/desconexão simulada e estados de pedido foram acrescentados com feedback acessível. O recibo informa a referência fictícia e não abre um Etherscan real.
-- Tablet empilha colunas e formulários; a tabela do recibo se adapta a telas estreitas.
+| Evento | Contrato e tratamento |
+| --- | --- |
+| `nft.updated` | `eventId,id,version,payload:{price,editions},sentAt`; anuncia a mudança e reconcilia catálogo, detalhe e carrinho por REST |
+| `order.updated` | `eventId,id,userId,version,status`; reconcilia pedido/carrinho somente da conta proprietária |
+| `session.subscribe` | Cliente apresenta `{token}`; o mock resolve a sessão e devolve o snapshot público e os pedidos da própria conta |
+| `catalog.snapshot` | Lista de eventos de catálogo usada para reconciliar versões na reconexão |
 
-## Limites da demonstração
+O cliente descarta versões antigas e duplicadas por recurso. A reconexão refaz leituras REST dos recursos ativos. Mudança de sessão fecha a conexão anterior; uma versão da inscrição impede resolução assíncrona antiga de associar outro usuário. Listeners e heartbeat são liberados no encerramento. Timers e transições pertencem aos mocks, sem setters de negócio fabricados na UI.
 
-A persistência MSW é por navegador/origem, não um banco compartilhado entre máquinas. Controles de cenário/reset são exclusivos da simulação e não são endpoints de produção. Fontes, imagens, fixtures e mocks são locais. A publicação deve manter HTTPS/Service Worker e fallback de SPA; não deve definir `VITE_ENABLE_MOCKS=false` sem um backend compatível.
+O binding tem limitações de namespaces, binários e rooms: a demonstração usa namespace raiz, eventos JSON e autorização explícita por conexão. Os cenários e seu reset estão documentados no README.
 
-Relatórios de testes e desempenho documentam os resultados medidos. A revisão adicional executa zoom real de 200% pela API do navegador em perfil descartável e ativa movimento reduzido no Playwright; as evidências ficam no relatório HTML. Isso não equivale a certificação de acessibilidade nem substitui avaliação com leitor de tela. A URL pública e o repositório só poderão ser registrados depois de definir/publicar o destino de entrega.
+## Interface, assets e limites
+
+Tailwind e componentes shadcn/ui foram adaptados à identidade visual. O CSS auxiliar do shadcn foi mantido localmente com sua licença em `src/vendor/shadcn`; a CLI de geração não participa da execução.
+
+Os rasters embutidos nos SVGs exportados foram derivados para WebP com qualidade 90 e dimensões adequadas; originais foram preservados. `scripts/optimize-assets.mjs` reproduz a conversão e `scripts/asset-mappings.json` registra os caminhos. Rotas carregam código sob demanda, cards usam imagens lazy e skeletons reservam dimensões.
+
+Ajustes em relação ao Figma: foco visível, bordas de formulário com maior contraste, erros associados aos campos, atalho para o conteúdo, busca/ordenação/paginação e gaveta de filtros funcionais, contagens reais das fixtures e feedback da conexão/pedido. A galeria usa recortes da única arte disponível. Tablet empilha colunas e o recibo adapta sua tabela a telas estreitas. Referências simuladas não abrem um Etherscan real.
+
+Dados persistem apenas por navegador/origem, sem banco compartilhado entre dispositivos. O token local e os controles de cenário são próprios da simulação, não uma arquitetura de segurança para produção. O build publicado exige HTTPS, mocks habilitados e fallback de SPA. Zoom real, movimento reduzido e reflow foram verificados; auditoria automatizada não certifica acessibilidade e não houve avaliação manual com leitor de tela.
